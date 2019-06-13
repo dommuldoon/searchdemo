@@ -1,9 +1,9 @@
 import React, { Component, useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { requestApiData, requestTweets } from "../actions";
 import _ from "lodash";
-import { fetchPosts } from "../actions/postActions";
-import { fetchTweets } from "../actions/tweetActions";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
@@ -45,44 +45,20 @@ const styles = theme => ({
 
 const Home = props => {
   const [q, setQ] = useState("");
-  const [results, setresults] = useState([]);
   const [reposOpen, setreposOpen] = useState(false);
   const [tweetsOpen, setTweetsOpen] = useState(false);
-  const [tweets, settweets] = useState([]);
   const [tweetQ, setTweetQ] = useState();
-  const [_searches, set_searches] = useState([]);
-
-  function makeAutocompleteLookup(q) {
-    if (q) {
-      props.dispatch(fetchPosts(q));
-    } else {
-      props.dispatch(fetchPosts());
-    }
-    setTweetsOpen(false);
-  }
-
-  const autocompleteSearchDebounced = _.debounce(makeAutocompleteLookup, 1000);
-  const autocompleteSearchThrottled = _.throttle(makeAutocompleteLookup, 1000);
-
-  const getTweets = q => {
-    props.dispatch(fetchTweets(q));
-    setTweetsOpen(true);
-  };
 
   const changeQuery = event => {
     setQ(event.target.value);
-    setreposOpen(true);
-    const thisQ = q;
-
-    // if (thisQ.length < 5) {
-    //   autocompleteSearchThrottled(thisQ);
-    // } else {
-    autocompleteSearchDebounced(thisQ);
-    // }
-  };
-
-  const autocompleteSearch = q => {
-    _fetch(q);
+    if (event.target.value) {
+      setreposOpen(true);
+      props.requestApiData(event.target.value);
+      setTweetsOpen(false);
+    } else {
+      setreposOpen(false);
+      setTweetsOpen(false);
+    }
   };
 
   const handleRepoClick = e => {
@@ -90,19 +66,13 @@ const Home = props => {
     setTweetQ(e.currentTarget.innerHTML);
     setQ(e.currentTarget.innerHTML);
     setreposOpen(false);
-    props.dispatch(fetchTweets(q));
+    // props.dispatch(fetchTweets(q));
     // getTweets(e.currentTarget.innerHTML);
+    props.requestTweets(q);
     setTweetsOpen(true);
   };
 
-  const _fetch = q => {
-    const searches = _searches || [];
-    searches.push(q);
-    set_searches(searches);
-  };
-
   const { classes } = props;
-  // const _searches = this.state._searches || [];
   return (
     <>
       <Container maxWidth="sm" className={classes.container}>
@@ -118,11 +88,11 @@ const Home = props => {
             value={q}
             onChange={changeQuery}
           />
-          {reposOpen ? (
+          {reposOpen && q ? (
             <Paper className={classes.paper}>
               <ul className={classes.repos}>
-                {!props.postsLoading || props.posts.length > 5 ? (
-                  props.posts.map((s, i) => {
+                {props.data ? (
+                  props.data.items.map((s, i) => {
                     return (
                       <li key={s.id}>
                         <Typography
@@ -167,7 +137,7 @@ const Home = props => {
               Tweets regarding {tweetQ}
             </Typography>
             <ul className={classes.repos}>
-              {!props.tweetsLoading && props.tweets.length > 0 ? (
+              {!props.tweetsloading && props.tweets ? (
                 props.tweets.map((s, i) => {
                   return <li key={s.id}>{s.text}</li>;
                 })
@@ -186,12 +156,18 @@ const Home = props => {
 };
 
 const mapStateToProps = state => ({
-  postsLoading: state.posts.loading,
-  posts: state.posts.items,
-  tweetsLoading: state.tweets.loading,
-  tweets: state.tweets.items
+  data: state.data.items,
+  tweets: state.tweets.items,
+  dataLoading: state.data.loading,
+  tweetsLoading: state.tweets.loading
 });
 
-const conHome = connect(mapStateToProps)(Home);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ requestApiData, requestTweets }, dispatch);
+
+const conHome = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);
 
 export default withStyles(styles)(conHome);

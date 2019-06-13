@@ -1,8 +1,9 @@
 import { combineReducers } from "redux";
-import postReducer from "./postReducer";
-import tweetsReducer from "./tweetsReducer";
+
+import data from "./data";
+import tweets from "./tweets";
 
 export default combineReducers({
-  posts: postReducer,
-  tweets: tweetsReducer
+  data,
+  tweets
 });
