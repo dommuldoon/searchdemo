@@ -61,14 +61,11 @@ const Home = props => {
     }
   };
 
-  const handleRepoClick = e => {
-    console.log("Name :", e.currentTarget.innerHTML);
-    setTweetQ(e.currentTarget.innerHTML);
-    setQ(e.currentTarget.innerHTML);
+  const handleRepoClick = (param) => {
+    setTweetQ(param);
+    setQ(param);
     setreposOpen(false);
-    // props.dispatch(fetchTweets(q));
-    // getTweets(e.currentTarget.innerHTML);
-    props.requestTweets(q);
+    props.requestTweets(param);
     setTweetsOpen(true);
   };
 
@@ -94,9 +91,8 @@ const Home = props => {
                 {props.data ? (
                   props.data.items.map((s, i) => {
                     return (
-                      <li key={s.id}>
+                      <li key={s.id} onClick={() => handleRepoClick(s.name)}>
                         <Typography
-                          onClick={handleRepoClick}
                           gutterBottom
                           variant="h5"
                           component="h2"
@@ -114,19 +110,19 @@ const Home = props => {
                     );
                   })
                 ) : (
-                  <li>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Loading
+                    <li>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        Loading
                     </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      Loading
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        Loading
                     </Typography>
-                  </li>
-                )}
+                    </li>
+                  )}
               </ul>
             </Paper>
           ) : null}
@@ -144,8 +140,8 @@ const Home = props => {
               ) : props.tweetsLoading ? (
                 <p>Loading</p>
               ) : (
-                <p>No tweets for this selection currently.</p>
-              )}
+                    <p>No tweets for this selection currently.</p>
+                  )}
             </ul>
           </Paper>
         ) : null}
