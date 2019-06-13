@@ -2,6 +2,10 @@ Please add your Twitter api key and secret to the .env file.
 
 In the project directory, you can run:
 
+'npm install'
+
+then
+
 'npm run dev'
 
 Runs the app in the development mode.<br>
