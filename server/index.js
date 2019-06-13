@@ -4,14 +4,14 @@ const axios = require("axios");
 const qs = require("query-string");
 const request = require("request");
 // require("dotenv").load();
-
+const dotenv = require('dotenv')
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/api/tweets", (req, res) => {
-  const param = req.query.q;
+  const param = encodeURIComponent(req.query.q);
   let bearer = "";
-  const credentials = `fzDrP9Dk7EDWt3lp9438QaqIK:dE4bZk9PwK7NIMbue6NzkoDdQP1Rl670HfiGHzr3RUqJDf1uTa`;
+  const credentials = `${process.env.CONSUMER_API}:${process.env.CONSUMER_SECRET}`;
   const credentialsBase64Encoded = new Buffer(credentials).toString("base64");
 
   request(
@@ -24,7 +24,7 @@ app.get("/api/tweets", (req, res) => {
       },
       body: "grant_type=client_credentials"
     },
-    function(err, resp, body) {
+    function (err, resp, body) {
       bearer = JSON.parse(body);
       bearer = bearer.access_token;
 
