@@ -12,7 +12,8 @@ export const fetchData = async q => {
 
 export const fetchTweets = async q => {
   try {
-    const response = await fetch("/api/tweets?q=" + q);
+    const param = encodeURIComponent(q);
+    const response = await fetch("/api/tweets?q=" + param);
     const data = await response.json();
     return data.items;
   } catch (e) {
