@@ -1,4 +1,4 @@
-export const fetchData = async q => {
+export const fetchData = async (q: string) => {
   try {
     const response = await fetch(
       "https://api.github.com/search/repositories?q=" + q
@@ -10,7 +10,7 @@ export const fetchData = async q => {
   }
 };
 
-export const fetchTweets = async q => {
+export const fetchTweets = async (q: string) => {
   try {
     const param = encodeURIComponent(q);
     const response = await fetch("/api/tweets?q=" + param);

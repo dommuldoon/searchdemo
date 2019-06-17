@@ -1,15 +1,14 @@
-import React, { Component, useState } from "react";
-import { withStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Paper from "@material-ui/core/Paper";
+import { createStyles, withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { requestApiData, requestTweets } from "../actions";
-import _ from "lodash";
-import Container from "@material-ui/core/Container";
-import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
 
-const styles = theme => ({
+const styles = createStyles({
   wrapper: {
     display: "flex",
     flexDirection: "column",
@@ -43,13 +42,25 @@ const styles = theme => ({
   }
 });
 
-const Home = props => {
+type HomeProps = {
+  classes?: any;
+  requestApiData?: any;
+  requestTweets?: any;
+  data?: any;
+  tweetsloading?: any;
+  tweets?: any;
+  tweetsLoading?: any;
+};
+
+const Home = (props: HomeProps) => {
   const [q, setQ] = useState("");
   const [reposOpen, setreposOpen] = useState(false);
   const [tweetsOpen, setTweetsOpen] = useState(false);
   const [tweetQ, setTweetQ] = useState();
 
-  const changeQuery = event => {
+  const changeQuery = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setQ(event.target.value);
     if (event.target.value) {
       setreposOpen(true);
@@ -61,7 +72,7 @@ const Home = props => {
     }
   };
 
-  const handleRepoClick = (param) => {
+  const handleRepoClick = (param: React.SetStateAction<string>) => {
     setTweetQ(param);
     setQ(param);
     setreposOpen(false);
@@ -89,14 +100,10 @@ const Home = props => {
             <Paper className={classes.paper}>
               <ul className={classes.repos}>
                 {props.data ? (
-                  props.data.items.map((s, i) => {
+                  props.data.items.map((s: any, i: any) => {
                     return (
                       <li key={s.id} onClick={() => handleRepoClick(s.name)}>
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="h2"
-                        >
+                        <Typography gutterBottom variant="h5" component="h2">
                           {s.name}
                         </Typography>
                         <Typography
@@ -110,19 +117,19 @@ const Home = props => {
                     );
                   })
                 ) : (
-                    <li>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        Loading
+                  <li>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      Loading
                     </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        Loading
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Loading
                     </Typography>
-                    </li>
-                  )}
+                  </li>
+                )}
               </ul>
             </Paper>
           ) : null}
@@ -134,14 +141,14 @@ const Home = props => {
             </Typography>
             <ul className={classes.repos}>
               {!props.tweetsloading && props.tweets ? (
-                props.tweets.map((s, i) => {
+                props.tweets.map((s: any, i: number) => {
                   return <li key={s.id}>{s.text}</li>;
                 })
               ) : props.tweetsLoading ? (
                 <p>Loading</p>
               ) : (
-                    <p>No tweets for this selection currently.</p>
-                  )}
+                <p>No tweets for this selection currently.</p>
+              )}
             </ul>
           </Paper>
         ) : null}
@@ -151,14 +158,17 @@ const Home = props => {
   // }
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: {
+  data: { items: any; loading: Boolean };
+  tweets: { items: any; loading: Boolean };
+}) => ({
   data: state.data.items,
   tweets: state.tweets.items,
   dataLoading: state.data.loading,
   tweetsLoading: state.tweets.loading
 });
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch: any) =>
   bindActionCreators({ requestApiData, requestTweets }, dispatch);
 
 const conHome = connect(
