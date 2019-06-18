@@ -19,7 +19,11 @@ export const fetchTweets = async (q: string) => {
     const param: string = encodeURIComponent(q);
     const response = await fetch("/api/tweets?q=" + param);
     const data = await response.json();
-    return data.items;
+    const reducedTweets: any[] = [];
+    data.items.forEach((tweet: any) => {
+      reducedTweets.push({ id: tweet.id, text: tweet.text });
+    });
+    return reducedTweets;
   } catch (e) {
     console.log(e);
   }
