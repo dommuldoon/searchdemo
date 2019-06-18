@@ -10,7 +10,7 @@ describe("actions", () => {
     expect(actions.requestApiData(q)).toEqual(expectedAction);
   });
   it("should create an action to recieve api data", () => {
-    const data = "Some data";
+    const data = [{ id: 1, name: "Some data", description: "A desc" }];
     const expectedAction = {
       type: actions.RECEIVE_API_DATA,
       data
@@ -26,7 +26,7 @@ describe("actions", () => {
     expect(actions.requestTweets(q)).toEqual(expectedAction);
   });
   it("should create an action to recieve tweets", () => {
-    const tweets = "Some Tweets";
+    const tweets = [{ id: 1, text: "A tweet" }];
     const expectedAction = {
       type: actions.RECEIVE_TWEETS,
       tweets

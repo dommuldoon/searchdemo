@@ -5,7 +5,6 @@
   "dependencies": {
     "@material-ui/core": "^4.0.0",
     "@material-ui/icons": "^3.0.2",
-    "@types/jest": "^24.0.15",
     "@types/lodash": "^4.14.134",
     "@types/node": "^12.0.8",
     "@types/react": "^16.8.20",
@@ -52,12 +51,17 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/enzyme": "^3.9.3",
+    "@types/jest": "^24.0.15",
     "body-parser": "^1.19.0",
+    "enzyme-to-json": "^3.3.5",
     "express-pino-logger": "^4.0.0",
     "node-env-run": "^3.0.2",
     "nodemon": "^1.19.1",
     "npm-run-all": "^4.1.5",
     "pino-colada": "^1.4.4",
-    "redux-saga": "^1.0.3"
+    "redux-mock-store": "^1.5.3",
+    "redux-saga": "^1.0.3",
+    "ts-jest": "^24.0.2"
   }
 }

@@ -1,6 +1,12 @@
 import { REQUEST_API_DATA, RECEIVE_API_DATA } from "../actions";
 
-export default (state = {}, { type, data }) => {
+interface IRepo {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export default (state = {}, { type, data }: { [key: string]: any }) => {
   switch (type) {
     case REQUEST_API_DATA:
       return {

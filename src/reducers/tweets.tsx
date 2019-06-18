@@ -1,6 +1,6 @@
 import { REQUEST_TWEETS, RECEIVE_TWEETS } from "../actions";
 
-export default (state = {}, { type, tweets }) => {
+export default (state = {}, { type, tweets }: {[key: string]: any}) => {
   switch (type) {
     case REQUEST_TWEETS:
       return {

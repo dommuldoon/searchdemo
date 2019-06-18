@@ -12,34 +12,34 @@ const useStyles = makeStyles(() => ({
   container: {
     marginBottom: "20px",
     marginTop: "20px",
-    textAlign: "center",
+    textAlign: "center"
   },
   divider: {
     borderTop: "5px solid grey",
     marginBottom: "20px",
     marginTop: "20px",
-    width: "30%",
+    width: "30%"
   },
   paper: {
-    marginTop: 10,
+    marginTop: 10
   },
   repos: {
     "& li": {
       padding: "10px 5px",
-      textAlign: "left",
+      textAlign: "left"
     },
     "& li:hover ": {
       backgroundColor: "#e2e2e2",
-      cursor: "pointer",
+      cursor: "pointer"
     },
-    "listStyle": "none",
-    "padding": 0,
+    listStyle: "none",
+    padding: 0
   },
   wrapper: {
     display: "flex",
     flexDirection: "column",
-    marginTop: 40,
-  },
+    marginTop: 40
+  }
 }));
 interface IRepo {
   id: number;
@@ -61,7 +61,7 @@ export interface IHomeProps {
   tweetsLoading: boolean;
 }
 
-export const Home: React.FC<IHomeProps> = (props) => {
+export const Home: React.FC<IHomeProps> = props => {
   const [q, setQ] = useState("");
   const [reposOpen, setreposOpen] = useState(false);
   const [tweetsOpen, setTweetsOpen] = useState(false);
@@ -69,10 +69,8 @@ export const Home: React.FC<IHomeProps> = (props) => {
 
   const classes = useStyles();
 
-  const changeQuery = (event: {
-    target: { value: string };
-  }) => {
-    // setQ(event.target.value);
+  const changeQuery = (event: { target: { value: string } }) => {
+    setQ(event.target.value);
     if (event.target.value) {
       setreposOpen(true);
       props.requestApiData(event.target.value);
@@ -96,7 +94,7 @@ export const Home: React.FC<IHomeProps> = (props) => {
       <div className="unique" />
       <Container maxWidth="sm" className={classes.container}>
         <Typography variant="h6" align="center">
-          Weclome to TwitHub.
+          Welcome to TwitHub.
           <br />
           Please search to select a repo and view its Tweets.
         </Typography>
@@ -113,9 +111,12 @@ export const Home: React.FC<IHomeProps> = (props) => {
             <Paper className={classes.paper}>
               <ul className={classes.repos}>
                 {props.data ? (
-                  props.data.map((repo) => {
+                  props.data.map(repo => {
                     return (
-                      <li key={repo.id} onClick={() => handleRepoClick(repo.name)}>
+                      <li
+                        key={repo.id}
+                        onClick={() => handleRepoClick(repo.name)}
+                      >
                         <Typography gutterBottom variant="h5" component="h2">
                           {repo.name}
                         </Typography>
@@ -130,19 +131,19 @@ export const Home: React.FC<IHomeProps> = (props) => {
                     );
                   })
                 ) : (
-                    <li>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        Loading
+                  <li>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      Loading
                     </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        Loading
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Loading
                     </Typography>
-                    </li>
-                  )}
+                  </li>
+                )}
               </ul>
             </Paper>
           ) : null}
@@ -154,14 +155,14 @@ export const Home: React.FC<IHomeProps> = (props) => {
             </Typography>
             <ul className={classes.repos}>
               {!props.tweetsloading && props.tweets ? (
-                props.tweets.map((tweet) => {
+                props.tweets.map(tweet => {
                   return <li key={tweet.id}>{tweet.text}</li>;
                 })
               ) : props.tweetsLoading ? (
                 <p>Loading</p>
               ) : (
-                    <p>No tweets for this selection currently.</p>
-                  )}
+                <p>No tweets for this selection currently.</p>
+              )}
             </ul>
           </Paper>
         ) : null}
@@ -171,22 +172,22 @@ export const Home: React.FC<IHomeProps> = (props) => {
   // }
 };
 
-const mapStateToProps = (state: {
+export const mapStateToProps = (state: {
   data: { items: IRepo[]; loading: boolean };
   tweets: { items: ITweet[]; loading: boolean };
 }) => ({
   data: state.data.items,
   dataLoading: state.data.loading,
   tweets: state.tweets.items,
-  tweetsLoading: state.tweets.loading,
+  tweetsLoading: state.tweets.loading
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) =>
+export const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators({ requestApiData, requestTweets }, dispatch);
 
 const conHome = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Home);
 
 export default conHome;
