@@ -1,8 +1,8 @@
-import React from "react";
-import { Toolbar, Typography, Button, IconButton } from "@material-ui/core";
+import { Button, IconButton, Toolbar, Typography } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
+import * as React from "react";
 
-const NavBar = () => {
+const NavBar: React.FC<{}> = () => {
   return (
     <Toolbar>
       <Button size="small">Subscribe</Button>

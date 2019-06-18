@@ -1,44 +1,42 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import * as React from "react";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  toolbarMain: {
-    borderBottom: `1px solid ${theme.palette.grey[300]}`
-  },
+const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.up("md")]: {
-      display: "none"
-    }
-  },
-  title: {
-    flexGrow: 1
+      display: "none",
+    },
   },
   navWrapper: {
     [theme.breakpoints.down("md")]: {
-      display: "none"
+      display: "none",
     },
     "& a": {
+      color: "inherit",
       textDecoration: "none",
-      color: "inherit"
     },
     "& a:visited": {
-      color: "inherit"
-    }
-  }
+      color: "inherit",
+    },
+  },
+  root: {
+    flexGrow: 1,
+  },
+  title: {
+    flexGrow: 1,
+  },
+  toolbarMain: {
+    borderBottom: `1px solid ${theme.palette.grey[300]}`,
+  },
+
 }));
 
-export default function Header() {
+const Header: React.FC<{}> = () => {
   const classes = useStyles();
 
   return (
@@ -60,4 +58,6 @@ export default function Header() {
       {/* </AppBar> */}
     </div>
   );
-}
+};
+
+export default Header;
