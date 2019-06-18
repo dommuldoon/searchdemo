@@ -1,6 +1,6 @@
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
-import { createStyles, withStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import React, { useState } from "react";
@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { requestApiData, requestTweets } from "../actions";
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   container: {
     marginBottom: "20px",
     marginTop: "20px",
@@ -40,34 +40,39 @@ const styles = createStyles({
     flexDirection: "column",
     marginTop: 40,
   },
-});
-
-export interface IHomeProps {
-  classes: {
-    container: string;
-    divider: string;
-    paper: string;
-    repos: string;
-    wrapper: string;
-  };
-  requestApiData?: any;
-  requestTweets?: any;
-  data?: any;
-  tweetsloading?: any;
-  tweets?: any;
-  tweetsLoading?: any;
+}));
+interface IRepo {
+  id: number;
+  name: string;
+  description: string;
 }
 
-const Home: React.FC<IHomeProps> = (props) => {
+interface ITweet {
+  id: number;
+  text: string;
+}
+
+export interface IHomeProps {
+  requestApiData: any;
+  requestTweets: any;
+  data: IRepo[];
+  tweetsloading: boolean;
+  tweets: ITweet[];
+  tweetsLoading: boolean;
+}
+
+export const Home: React.FC<IHomeProps> = (props) => {
   const [q, setQ] = useState("");
   const [reposOpen, setreposOpen] = useState(false);
   const [tweetsOpen, setTweetsOpen] = useState(false);
   const [tweetQ, setTweetQ] = useState("");
 
+  const classes = useStyles();
+
   const changeQuery = (event: {
-    target: { value: React.SetStateAction<string> };
+    target: { value: string };
   }) => {
-    setQ(event.target.value);
+    // setQ(event.target.value);
     if (event.target.value) {
       setreposOpen(true);
       props.requestApiData(event.target.value);
@@ -78,7 +83,7 @@ const Home: React.FC<IHomeProps> = (props) => {
     }
   };
 
-  const handleRepoClick = (param: React.SetStateAction<string>) => {
+  const handleRepoClick = (param: string) => {
     setTweetQ(param);
     setQ(param);
     setreposOpen(false);
@@ -86,38 +91,40 @@ const Home: React.FC<IHomeProps> = (props) => {
     setTweetsOpen(true);
   };
 
-  const { classes } = props;
   return (
     <>
+      <div className="unique" />
       <Container maxWidth="sm" className={classes.container}>
         <Typography variant="h6" align="center">
           Weclome to TwitHub.
           <br />
           Please search to select a repo and view its Tweets.
         </Typography>
+
         <div className={classes.wrapper}>
           <TextField
             placeholder="Type something here to search"
             type="text"
             value={q}
             onChange={changeQuery}
+            id="searchbox"
           />
           {reposOpen && q ? (
             <Paper className={classes.paper}>
               <ul className={classes.repos}>
                 {props.data ? (
-                  props.data.map((s: any, i: any) => {
+                  props.data.map((repo) => {
                     return (
-                      <li key={s.id} onClick={() => handleRepoClick(s.name)}>
+                      <li key={repo.id} onClick={() => handleRepoClick(repo.name)}>
                         <Typography gutterBottom variant="h5" component="h2">
-                          {s.name}
+                          {repo.name}
                         </Typography>
                         <Typography
                           variant="body2"
                           color="textSecondary"
                           component="p"
                         >
-                          {s.description}
+                          {repo.description}
                         </Typography>
                       </li>
                     );
@@ -147,8 +154,8 @@ const Home: React.FC<IHomeProps> = (props) => {
             </Typography>
             <ul className={classes.repos}>
               {!props.tweetsloading && props.tweets ? (
-                props.tweets.map((s: any, i: number) => {
-                  return <li key={s.id}>{s.text}</li>;
+                props.tweets.map((tweet) => {
+                  return <li key={tweet.id}>{tweet.text}</li>;
                 })
               ) : props.tweetsLoading ? (
                 <p>Loading</p>
@@ -165,8 +172,8 @@ const Home: React.FC<IHomeProps> = (props) => {
 };
 
 const mapStateToProps = (state: {
-  data: { items: any; loading: boolean };
-  tweets: { items: any; loading: boolean };
+  data: { items: IRepo[]; loading: boolean };
+  tweets: { items: ITweet[]; loading: boolean };
 }) => ({
   data: state.data.items,
   dataLoading: state.data.loading,
@@ -182,4 +189,4 @@ const conHome = connect(
   mapDispatchToProps,
 )(Home);
 
-export default withStyles(styles)(conHome);
+export default conHome;

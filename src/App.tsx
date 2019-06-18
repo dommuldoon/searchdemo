@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Home from "./components/Home";
 import Footer from "./components/layout/Footer";
@@ -11,10 +11,12 @@ const App: React.FC = () => {
     <>
       <Header />
       <main className="container">
-        <Switch>
-          <Route path="/home" component={Home} />
-          <Redirect from="/" exact to="/home" />
-        </Switch>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/home" component={Home} />
+            <Redirect from="/" exact to="/home" />
+          </Switch>
+        </BrowserRouter>
       </main>
       <Footer />
     </>

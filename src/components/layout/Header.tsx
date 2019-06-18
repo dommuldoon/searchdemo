@@ -1,11 +1,11 @@
 import IconButton from "@material-ui/core/IconButton";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import * as React from "react";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.up("md")]: {
@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
   toolbarMain: {
     borderBottom: `1px solid ${theme.palette.grey[300]}`,
   },
-
 }));
 
 const Header: React.FC<{}> = () => {
