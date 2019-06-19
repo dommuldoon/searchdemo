@@ -7,6 +7,8 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { requestApiData, requestTweets } from "../actions";
+import Repos from "./Repos";
+import Tweets from "./Tweets";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -45,6 +47,7 @@ interface IRepo {
   id: number;
   name: string;
   description: string;
+  dataLoading: boolean;
 }
 
 interface ITweet {
@@ -56,7 +59,7 @@ export interface IHomeProps {
   requestApiData: any;
   requestTweets: any;
   data: IRepo[];
-  tweetsloading: boolean;
+  dataLoading: boolean;
   tweets: ITweet[];
   tweetsLoading: boolean;
 }
@@ -108,63 +111,11 @@ export const Home: React.FC<IHomeProps> = props => {
             id="searchbox"
           />
           {reposOpen && q ? (
-            <Paper className={classes.paper}>
-              <ul className={classes.repos}>
-                {props.data ? (
-                  props.data.map(repo => {
-                    return (
-                      <li
-                        key={repo.id}
-                        onClick={() => handleRepoClick(repo.name)}
-                      >
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {repo.name}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                          component="p"
-                        >
-                          {repo.description}
-                        </Typography>
-                      </li>
-                    );
-                  })
-                ) : (
-                  <li>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Loading
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      Loading
-                    </Typography>
-                  </li>
-                )}
-              </ul>
-            </Paper>
+            <Repos data={props.data} repoClick={handleRepoClick} />
           ) : null}
         </div>
         {tweetsOpen ? (
-          <Paper className={classes.paper}>
-            <Typography variant="h6" align="center">
-              Tweets regarding {tweetQ}
-            </Typography>
-            <ul className={classes.repos}>
-              {!props.tweetsloading && props.tweets ? (
-                props.tweets.map(tweet => {
-                  return <li key={tweet.id}>{tweet.text}</li>;
-                })
-              ) : props.tweetsLoading ? (
-                <p>Loading</p>
-              ) : (
-                <p>No tweets for this selection currently.</p>
-              )}
-            </ul>
-          </Paper>
+          <Tweets tweets={props.tweets} tweetsLoading={props.tweetsLoading} repo={tweetQ} />
         ) : null}
       </Container>
     </>
@@ -179,7 +130,7 @@ export const mapStateToProps = (state: {
   data: state.data.items,
   dataLoading: state.data.loading,
   tweets: state.tweets.items,
-  tweetsLoading: state.tweets.loading
+  tweetsLoading: state.tweets.loading,
 });
 
 export const mapDispatchToProps = (dispatch: Dispatch) =>
