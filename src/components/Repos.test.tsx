@@ -11,7 +11,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe("Repos Component", () => {
     let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
 
-    const mockRepoClickfn = jest.fn().mockReturnValue(mockRepoClickfn);
+    const mockRepoClickfn = jest.fn().mockReturnValue("repo");
     const mockData = [
         { id: 1, name: "Repo Name", description: "Repo description" }
     ];
